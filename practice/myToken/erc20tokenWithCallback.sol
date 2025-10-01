@@ -62,20 +62,25 @@ contract BaseERC20 {
 // 回调接口定义（接收方需实现）
 interface ITokenReceiver {
     // 回调函数：接收代币时触发，返回特定选择器表示成功
-    function tokensReceived(address sender, address receiver, uint256 amount) external returns (bytes4);
+    // function tokensReceived(address sender, address receiver, uint256 amount) external returns (bytes4);
+
+    function tokensReceived(address sender, address receiver, uint256 amount, bytes calldata data) external returns (bytes4);
 }
 
 // 带回调功能的ERC20扩展合约
 contract ERC20WithCallback is BaseERC20 {
     // 回调函数的选择器（用于验证接收方是否正确实现）
-    bytes4 public constant TOKENS_RECEIVED_SELECTOR = bytes4(keccak256("tokensReceived(address,address,uint256)"));
+    // bytes4 public constant TOKENS_RECEIVED_SELECTOR = bytes4(keccak256("tokensReceived(address,address,uint256)"));
+
+    bytes4 public constant TOKENS_RECEIVED_SELECTOR = bytes4(keccak256("tokensReceived(address,address,uint256,bytes)"));
 
     constructor() 
         BaseERC20("ERC20WithCallback", "ERC20CB", 18, 100000000) // 初始化基础ERC20参数
     {}
 
     // 带回调的转账函数：目标为合约时触发其tokensReceived
-    function transferWithCallback(address to, uint256 value) public returns (bool) {
+    // function transferWithCallback(address to, uint256 value) public returns (bool) {
+    function transferWithCallback(address to, uint256 value, bytes calldata data) public returns (bool) {
         // 1. 执行基础转账逻辑
         require(balances[msg.sender] >= value, "ERC20: transfer amount exceeds balance");
         balances[msg.sender] -= value;
@@ -84,7 +89,9 @@ contract ERC20WithCallback is BaseERC20 {
 
         // 2. 若目标是合约地址，调用其tokensReceived回调
         if (address(to).code.length > 0) { // 判断是否为合约地址
-            bytes4 returnSelector = ITokenReceiver(to).tokensReceived(msg.sender, to, value);
+            // bytes4 returnSelector = ITokenReceiver(to).tokensReceived(msg.sender, to, value);
+            // bytes4 returnSelector = ITokenReceiver(to).tokensReceived(msg.sender, to, value, "");
+            bytes4 returnSelector = ITokenReceiver(to).tokensReceived(msg.sender, to, value, data);
             // 验证回调返回值，确保接收方正确处理
             require(returnSelector == TOKENS_RECEIVED_SELECTOR, "ERC20: callback failed");
         }
