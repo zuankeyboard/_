@@ -119,6 +119,9 @@ contract NFTMarket {
         address seller = listing.seller;
         uint256 price = listing.price;
 
+        // 检查买家不能是卖家自己
+        require(buyer != seller, "Cannot buy your own NFT");
+
         // 1. 转移ERC20 Token（买家 -> 卖家）
         require(
             paymentToken.transferFrom(buyer, seller, price),
@@ -156,7 +159,7 @@ contract NFTMarket {
             data,
             (address, uint256)
         );
-        require(nftContract != address(0) && tokenId > 0, "Invalid data");
+        require(nftContract != address(0), "Invalid data");
 
         Listing storage listing = listings[nftContract][tokenId];
         // 检查上架状态和金额是否匹配
@@ -165,6 +168,9 @@ contract NFTMarket {
 
         address buyer = sender;
         address seller = listing.seller;
+
+        // 检查买家不能是卖家自己
+        require(buyer != seller, "Cannot buy your own NFT");
 
         // 1. 将市场收到的Token转移给卖家
         require(
