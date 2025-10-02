@@ -15,11 +15,7 @@ contract BankV1Test is Test {
     address public user5;
 
     // 事件定义，用于测试事件触发
-    event Deposited(
-        address indexed depositor,
-        uint256 amount,
-        uint256 timestamp
-    );
+    event Deposited(address indexed depositor, uint256 amount, uint256 timestamp);
     event Withdrawn(address indexed owner, uint256 amount, uint256 timestamp);
     event TopDepositorsUpdated(IBank.Depositor[3] newTopDepositors);
 
@@ -74,10 +70,7 @@ contract BankV1Test is Test {
         bank.deposit{value: depositAmount}();
 
         // 断言检查存款后状态
-        assertEq(
-            bank.getContractBalance(),
-            initialContractBalance + depositAmount
-        );
+        assertEq(bank.getContractBalance(), initialContractBalance + depositAmount);
         assertEq(user1.balance, initialUserBalance - depositAmount);
 
         // 检查用户在合约中的存款记录（需要owner权限）
@@ -91,7 +84,7 @@ contract BankV1Test is Test {
         vm.prank(user1);
         vm.expectEmit(true, false, false, false);
         emit Deposited(user1, depositAmount, 0);
-        (bool success, ) = address(bank).call{value: depositAmount}("");
+        (bool success,) = address(bank).call{value: depositAmount}("");
         assertTrue(success);
 
         assertEq(bank.getContractBalance(), depositAmount);
@@ -273,10 +266,7 @@ contract BankV1Test is Test {
 
         // 验证提款后状态
         assertEq(owner.balance, initialOwnerBalance + withdrawAmount);
-        assertEq(
-            bank.getContractBalance(),
-            initialContractBalance - withdrawAmount
-        );
+        assertEq(bank.getContractBalance(), initialContractBalance - withdrawAmount);
     }
 
     // 测试非管理员无法提款
