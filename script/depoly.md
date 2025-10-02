@@ -28,5 +28,9 @@ source .env && forge verify-contract <CONTRACT_ADDRESS> \
 ```
 # 手动验证
 ```
+source .env && forge verify-contract 0x14A58AAd9f20662299a4BBF24F7D41508065D0E1 src/MyToken.sol:MyToken --verifier etherscan --etherscan-api-key $ETHERSCAN_API_KEY --chain 11155111 
+
+source .env && forge verify-contract 0x14A58AAd9f20662299a4BBF24F7D41508065D0E1 src/MyToken.sol:MyToken --verifier sourcify --chain 11155111 
+
 source .env && forge verify-contract 0x14A58AAd9f20662299a4BBF24F7D41508065D0E1 src/MyToken.sol:MyToken --verifier etherscan --etherscan-api-key $ETHERSCAN_API_KEY --chain 11155111 --constructor-args $(cast abi-encode "constructor(string,string)" "DecertToken" "DEC") 
 ```
