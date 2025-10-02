@@ -41,15 +41,9 @@ contract DeployMyToken is Script {
         string memory finalJson = vm.serializeAddress(json1, "address", addr);
 
         // 构建文件目录路径：deployments/合约名称_
-        string memory dirPath = string.concat(
-            string.concat("deployments/", name),
-            "_"
-        );
+        string memory dirPath = string.concat(string.concat("deployments/", name), "_");
 
         // 将最终 JSON 写入磁盘，文件名为 链ID.json
-        vm.writeJson(
-            finalJson,
-            string.concat(dirPath, string.concat(chainId, ".json"))
-        );
+        vm.writeJson(finalJson, string.concat(dirPath, string.concat(chainId, ".json")));
     }
 }
