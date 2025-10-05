@@ -2,13 +2,15 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/reset.css">
     <link rel="icon" href="./img/icon.png">
-    <title>My Uniswap Interface</title>
+    <title>Uniswap Interface</title>
 </head>
 
 <body>
     <div class="header">
-        <img src="./img/icon.png" width="25" alt="icon">
+        <img src="./img/icon.png" alt="icon">
         <div class="switchPage">
             <a>兑换</a>
             <a>流动池</a>
@@ -16,12 +18,12 @@
             <a>图标</a>
         </div>
         <div class="right">
-            <span class="changeNetwork">
-                <img src="./img/ethereum.png" width="25" alt="eth">
-                <span>Ethereum</span>
-            </span>
-            <button>连接钱包</button>
-            <button>···</button>
+            <div class="changeNetwork">
+                <img src="./img/ethereum.png" alt="eth">
+                <span class="Ethereum">Ethereum</span>
+            </div>
+            <button class="connect">连接钱包</button>
+            <button class="menu">···</button>
         </div>
     </div>
     <div class="body">
@@ -29,44 +31,43 @@
             <div class="swap-page-header">
                 <span>兑换</span>
                 <button>
-                    <img src="./img/setup.png" width="25" alt="swap">
+                    <img src="./img/setup.png" alt="setup">
                 </button>
             </div>
             <div class="swap-page-body">
                 <div class="token1">
                     <input type="text" inputmode="decimal" placeholder="0.0">
-                    <button>
-                        <div class="token-info">
-                            <img src="./img/ethereum.png" width="25" alt="eth">
+                    <button class="token1-btn">
+                        <div class="token1-info">
+                            <img src="./img/ethereum.png" alt="eth">
                             <span>ETH</span>
                         </div>
                     </button>
                 </div>
-                <button>
-                    <img src="./img/arrow.png" width="25" alt="arrow">
+                <button class="arrow">
+                    <img src="./img/arrow.png" alt="arrow">
                 </button>
                 <div class="token2">
                     <input type="text" inputmode="decimal" placeholder="0.0">
-                    <button>
-                        <div class="token-info">
+                    <button class="token2-btn">
+                        <div class="token2-info">
                             <span>选择令牌</span>
                         </div>
                     </button>
                 </div>
             </div>
             <div class="swap-page-footer">
-                <button>连接钱包</button>
+                <button class="swap-page-footer-connect">连接钱包</button>
             </div>
         </div>
         <div class="chooseLanguage">
-            <span>Uniswap可用:</span>
+            <span>Uniswap可用：</span>
             <a href="">English</a>
         </div>
         <div class="gasPriceAndBlockNumber">
-            <a href="https://etherscan.io/gastracker">3 gwei</a>
-            <a href="">114514</a>
+            <a href="https://etherscan.io/gastracker"> 3 gwei</a>
+            <a href="">15687194</a>
         </div>
     </div>
 </body>
-
 </html>
