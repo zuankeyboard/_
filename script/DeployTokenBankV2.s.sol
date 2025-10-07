@@ -9,7 +9,7 @@ contract DeployTokenBankV2 is Script {
     function run() external {
         // 使用 Anvil 默认的第一个账户私钥
         uint256 deployerPrivateKey = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
-        
+
         // 开始广播交易
         vm.startBroadcast(deployerPrivateKey);
 
@@ -31,7 +31,7 @@ contract DeployTokenBankV2 is Script {
         console.log("Deployer token balance:", token.balanceOf(deployer));
 
         // 4. 批准 TokenBank 合约可以转移代币（用于测试 deposit 功能）
-        uint256 approveAmount = 1000000 * 10**18; // 100万代币
+        uint256 approveAmount = 1000000 * 10 ** 18; // 100万代币
         token.approve(address(tokenBank), approveAmount);
         console.log("Approved TokenBank to spend:", approveAmount);
 

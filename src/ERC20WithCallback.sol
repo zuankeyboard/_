@@ -13,16 +13,11 @@ contract BaseERC20 {
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
-    constructor(
-        string memory _name,
-        string memory _symbol,
-        uint8 _decimals,
-        uint256 _totalSupply
-    ) {
+    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _totalSupply) {
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
-        totalSupply = _totalSupply * (10 **uint256(_decimals));
+        totalSupply = _totalSupply * (10 ** uint256(_decimals));
         balances[msg.sender] = totalSupply;
     }
 
@@ -57,8 +52,6 @@ contract BaseERC20 {
     function allowance(address _owner, address _spender) public view returns (uint256) {
         return allowances[_owner][_spender];
     }
-
-
 }
 
 import "./ITokenReceiver.sol";
@@ -68,7 +61,7 @@ contract ERC20WithCallback is BaseERC20 {
     // 回调函数的选择器（用于验证接收方是否正确实现）
     bytes4 public constant TOKENS_RECEIVED_SELECTOR = bytes4(keccak256("tokensReceived(address,address,uint256,bytes)"));
 
-    constructor() 
+    constructor()
         BaseERC20("TokenBank Token", "TBT", 18, 100000000) // 初始化基础ERC20参数
     {}
 
@@ -81,13 +74,13 @@ contract ERC20WithCallback is BaseERC20 {
         emit Transfer(msg.sender, to, value);
 
         // 2. 若目标是合约地址，调用其tokensReceived回调
-        if (address(to).code.length > 0) { // 判断是否为合约地址
+        if (address(to).code.length > 0) {
+            // 判断是否为合约地址
             // 添加安全检查：确保目标合约实现了ITokenReceiver接口
             (bool success, bytes memory returnData) = to.staticcall(
-                abi.encodeWithSignature("tokensReceived(address,address,uint256,bytes)", 
-                msg.sender, to, value, data)
+                abi.encodeWithSignature("tokensReceived(address,address,uint256,bytes)", msg.sender, to, value, data)
             );
-            
+
             if (success && returnData.length >= 32) {
                 bytes4 returnSelector = abi.decode(returnData, (bytes4));
                 // 验证回调返回值，确保接收方正确处理

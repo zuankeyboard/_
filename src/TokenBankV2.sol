@@ -13,6 +13,7 @@ import "./ITokenReceiver.sol";
 contract TokenBank {
     IERC20 public immutable token;
     mapping(address => uint256) public userDeposits;
+
     event Deposited(address indexed user, uint256 amount, uint256 timestamp);
     event Withdrawn(address indexed user, uint256 amount, uint256 timestamp);
 
@@ -49,21 +50,24 @@ contract TokenBank {
 contract TokenBankV2 is TokenBank, ITokenReceiver {
     // 添加重入锁
     bool private _callbackLocked;
-    
+
     // 添加回调事件
     event TokensReceived(address indexed sender, uint256 amount, bytes data);
-    
+
     constructor(address _tokenAddress) TokenBank(_tokenAddress) {
         // 确保传入的是带回调功能的ERC20合约（可选校验）
         require(_tokenAddress != address(0), "TokenBankV2: invalid token address");
     }
 
     // ITokenReceiver 接口实现：处理来自 ERC20WithCallback 的回调
-    function tokensReceived(address sender, address receiver, uint256 amount, bytes calldata data) external returns (bytes4) {
+    function tokensReceived(address sender, address receiver, uint256 amount, bytes calldata data)
+        external
+        returns (bytes4)
+    {
         // 重入保护
         require(!_callbackLocked, "TokenBankV2: reentrant call");
         _callbackLocked = true;
-        
+
         // 安全校验1：确保调用者是我们信任的Token合约
         require(msg.sender == address(token), "TokenBankV2: only token contract can call");
         // 安全校验2：确保接收者是当前银行合约（防止回调到其他地址）
@@ -78,7 +82,7 @@ contract TokenBankV2 is TokenBank, ITokenReceiver {
 
         // 释放重入锁
         _callbackLocked = false;
-        
+
         // 返回回调选择器表示处理成功
         return bytes4(keccak256("tokensReceived(address,address,uint256,bytes)"));
     }
